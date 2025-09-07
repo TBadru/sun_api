@@ -1,1 +1,1 @@
-Building a Ruby on Rails API with Swagger Documentation: A Practical Guide
+Building a Ruby on Rails API with Swagger Documentation
