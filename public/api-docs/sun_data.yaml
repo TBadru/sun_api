@@ -1,0 +1,145 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Sun API
+  description: API to fetch sunrise, sunset, and related solar data
+host: localhost:3000
+basePath: /api/v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /sun_data:
+    get:
+      summary: "Get sunrise/sunset info"
+      description: "Returns sunrise, sunset, and related time data for a given date and location"
+      parameters:
+        - name: lat
+          in: query
+          description: Latitude of the location
+          required: true
+          type: number
+        - name: lng
+          in: query
+          description: Longitude of the location
+          required: true
+          type: number
+        - name: date
+          in: query
+          description: Date in YYYY-MM-DD format
+          required: false
+          type: string
+          format: date
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: "#/definitions/SunDataResponse"
+
+  /sun_data/today:
+    get:
+      summary: "Get today's sunrise/sunset info"
+      description: "Returns sunrise, sunset, and related time data for today at the given location"
+      parameters:
+        - name: lat
+          in: query
+          description: Latitude of the location
+          required: true
+          type: number
+        - name: lng
+          in: query
+          description: Longitude of the location
+          required: true
+          type: number
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: "#/definitions/SunDataResponse"
+
+  /sun_data/range:
+    get:
+      summary: "Get sunrise/sunset info for a date range"
+      description: "Returns sunrise, sunset, and related time data for multiple dates between start_date and end_date"
+      parameters:
+        - name: lat
+          in: query
+          description: Latitude of the location
+          required: true
+          type: number
+        - name: lng
+          in: query
+          description: Longitude of the location
+          required: true
+          type: number
+        - name: start_date
+          in: query
+          description: Start date in YYYY-MM-DD format
+          required: true
+          type: string
+          format: date
+        - name: end_date
+          in: query
+          description: End date in YYYY-MM-DD format
+          required: true
+          type: string
+          format: date
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: "#/definitions/SunDataRangeResponse"
+
+definitions:
+  SunDataResponse:
+    type: object
+    required: [results, status]
+    properties:
+      results:
+        $ref: "#/definitions/SunDataResult"
+      status:
+        type: string
+
+  SunDataRangeResponse:
+    type: object
+    required: [results, status]
+    properties:
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/SunDataResult"
+      status:
+        type: string
+
+  SunDataResult:
+    type: object
+    required:
+      - date
+      - sunrise
+      - sunset
+      - first_light
+      - last_light
+      - dawn
+      - dusk
+      - solar_noon
+      - golden_hour
+      - day_length
+      - timezone
+      - utc_offset
+    properties:
+      date: { type: string, format: date }
+      sunrise: { type: string }
+      sunset: { type: string }
+      first_light: { type: string }
+      last_light: { type: string }
+      dawn: { type: string }
+      dusk: { type: string }
+      solar_noon: { type: string }
+      golden_hour: { type: string }
+      day_length: { type: string }
+      timezone: { type: string }
+      utc_offset: { type: integer }
